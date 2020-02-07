@@ -1,0 +1,157 @@
+
+$breakpoint: 768px;
+$screen-max-width: 1280px;
+
+$font-mono: 'Source Code Pro', monospace;
+$font-standard: 'Roboto', sans-serif;
+
+$colors: (
+  mainWhite:    #fff,
+  mainGray:     #666,
+  mainYellow:   #f1c40f, // https://flatuicolors.com/palette/defo
+  mainRed:      #e74c3c, // https://flatuicolors.com/palette/defo
+  mainOrange:   #e67e22, // https://flatuicolors.com/palette/defo
+  mainGreen:    #2ecc71, // https://flatuicolors.com/palette/defo
+  mainDarkGreen:#16a085, // https://flatuicolors.com/palette/defo //JIN
+  mainBlue:     #3498db, // https://flatuicolors.com/palette/defo
+  mainPurple:   #9b59b6, // https://flatuicolors.com/palette/defo
+  mainGold:     #ffd700,
+  mainSilver:   #c0c0c0,
+  mainBronze:   #c47222,
+  usRed:        #d63031, // https://flatuicolors.com/palette/us
+  usOrange:     #e17055, // https://flatuicolors.com/palette/us
+  usYellow:     #fdcb6e, // https://flatuicolors.com/palette/us
+  usGreen:      #00b894, // https://flatuicolors.com/palette/us
+  usBlue:       #0984e3, // https://flatuicolors.com/palette/us
+  usLightBlue:  #74b9ff, // https://flatuicolors.com/palette/us
+  usPurple:     #a29bfe, // https://flatuicolors.com/palette/us
+  battleUser1:  #609da8, // from PvP background image
+  battleUser2:  #be6c65, // from PvP background image
+  twitter:      #1da1f2, // http://brandcolors.net/
+  discord:      #7289da,  // http://brandcolors.net/
+
+  // new Dylan colors
+  bittersweet:  #FF6E63,
+  mineShaft:    #303030,
+  emperor:      #4f4f4f,
+  tuna:         #37393e,
+  tuna-dark:    #2f333d,
+  shark:        #282b33,
+  shark-dark:   #1d1e21,
+  swan:         #fdfdfd,
+  riverbed:     #474E5C,
+  pictonblue:   #3b8fe5,
+  capecod:      #3f4343,
+  shuttle:      #566776,
+  osloGray:     #8a8d90,
+  
+  // events
+  pastelGreen:  #66D78D,
+  portage:      #8F7EF7,
+  sandyBrown:   #f49d5a,
+  orchid:       #d776d1,
+  carnation:    #f26565,
+  sundown:      #ffaebe,
+  
+  // nft explorer colors:
+  obsidian:     #212121,
+  coal:         #343232,
+  iron:         #3A3838,
+  magikarp:     #FF7675,
+  woodsmoke:    #101113,  
+  gossip:       #C9F6B4,
+  mercury:      #E5E5E5,
+  kournikova:   #FFEA75,
+  malibu:       #6FC3FF,
+  ectoplasm:    #D16EFF,
+);
+
+$color-primary: #14a5c2;
+$color-primary-text: #303133;
+$color-regular-text: map-get($colors, swan);
+$color-secondary-text: #909399;
+$color-placeholder-text: #C0C4CC;
+$color-main-background: map-get($colors, obsidian);
+$color-base-border: #DCDFE6;
+$color-light-border: #E4E7ED;
+$color-lighter-border: #EBEEF5;
+$color-extra-light-border: #F2F6FC;
+$color-basic-black: #000;
+$color-basic-white: #fff;
+$color-attention: map-get($colors, mainRed);
+
+$color-obsidian: map-get($colors, obsidian);
+$color-coal: map-get($colors, coal);
+$color-iron: map-get($colors, iron);
+$color-magikarp: map-get($colors, magikarp);
+$color-swan: map-get($colors, swan);
+$color-gossip: map-get($colors, gossip);
+$color-woodsmoke: map-get($colors, woodsmoke);
+$color-bittersweet: map-get($colors, bittersweet);
+$color-mercury: map-get($colors, mercury);
+$color-capecod: map-get($colors, capecod);
+$color-sandyBrown: map-get($colors, sandyBrown);
+$color-kournikova: map-get($colors, kournikova);
+$color-malibu: map-get($colors, malibu);
+$color-ectoplasm: map-get($colors, ectoplasm);
+$color-error: map-get($colors, mainRed);
+
+// convenience
+%row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+%col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+%btn-primary {
+  @extend %row;
+  border: none;
+  font-weight: 400;
+  color: $color-obsidian;
+  background-color: $color-magikarp;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  transition: 0.1s ease-in-out;
+
+  svg {
+    margin-left: 0.25rem;
+    padding-bottom: 0.1rem;
+    font-size: 0.9rem;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($color-magikarp, 5);
+  }
+}
+
+// mixins
+@mixin breakpoint($class) {
+  @if $class == xs {
+    @media (max-width: 767px) { @content; }
+  }
+ 
+  @else if $class == sm {
+    @media (min-width: 768px) { @content; }
+  }
+ 
+  @else if $class == md {
+    @media (min-width: 992px) { @content; }
+  }
+ 
+  @else if $class == lg {
+    @media (min-width: 1200px) { @content; }
+  }
+ 
+  @else {
+    @warn "Breakpoint mixin supports: xs, sm, md, lg";
+  }
+}

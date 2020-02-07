@@ -1,0 +1,124 @@
+@import '~normalize.css/normalize';
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400&display=swap');
+
+@import '~bulma/sass/utilities/_all.sass';
+@import '~bulma/sass/components/dropdown.sass';
+
+@import './variables';
+@import './transition';
+
+body {
+  color: $color-regular-text;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  word-break: break-word;
+  background-color: $color-main-background;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: $color-swan;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: darken($color-primary, 5%);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+table {
+  border-collapse: collapse;
+  color: $color-regular-text;
+  font-size: 14px;
+  width: 100%;
+}
+
+tr {
+  border-bottom: 1px solid $color-lighter-border;
+
+  &:first-of-type {
+    border-top: 1px solid $color-lighter-border;
+  }
+
+  &:nth-of-type(2n) {
+    background: #fafafa;
+  }
+}
+
+th,
+td {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 12px;
+  position: relative;
+  text-align: left;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+th {
+  color: $color-secondary-text;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+dl {
+  background: #fafafa;
+  border: 1px solid $color-lighter-border;
+  border-radius: 4px;
+  color: $color-regular-text;
+  font-size: 14px;
+  margin: 0;
+  padding: 1rem;
+
+  dt {
+    color: $color-secondary-text;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+
+  dd {
+    margin: 0;
+
+    & + dt {
+      margin-top: 1rem;
+    }
+  }
+}
+
+[lazy] {
+  transition: opacity 0.3s ease;
+}
+
+[lazy='loading'] {
+  opacity: 0;
+}
+
+[lazy='loaded'] {
+  opacity: 1;
+}
+
+.el-dialog {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+
+  &__wrapper {
+    padding: 1rem;
+
+    @media (min-width: $breakpoint) {
+      padding: 2rem;
+    }
+  }
+}
