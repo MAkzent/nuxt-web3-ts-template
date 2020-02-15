@@ -69,8 +69,8 @@
     }
 
     async beforeMount () {
-     const { assets } = await this.$openSeaService.getKittiesByAccount(this.ownAddress, this.networkId) || {}
-     console.log(assets)
+     const { assets } = await this.$openSeaService.getKittiesByAccount(this.ownAddress, this.networkId) || {};
+     console.log(assets);
      if (assets) { this.kitties = assets }
      this.fetched = true
     }
