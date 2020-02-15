@@ -42,7 +42,8 @@
     "lint": "eslint --ext .ts,.js,.vue --ignore-path .gitignore .",
     "lintfix": "eslint --fix --ext .ts,.js,.vue --ignore-path .gitignore .",
     "remove-cache": "rm -rf node_modules/.cache/hard-source/*",
-    "remove-node-modules": "rm -r node_modules"
+    "remove-node-modules": "rm -r node_modules",
+    "heroku-postbuild": "npm run build"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^1.0.0",
