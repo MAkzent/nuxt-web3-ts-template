@@ -1,23 +1,25 @@
 <template lang="pug">
-.topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
-  .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
-  .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
-  nuxt-link(:to="'/'") Hello World
-  .topbar__navigation
+section
+  .topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
     client-only
-      button.topbar__navigation__account(
-        v-if="!hasWallet"
-        @click="sendToMetamask"
-      ) Install Wallet
-      button.topbar__navigation__account(
-        v-else
-        @click="handleAccountBtnClick"
-      )
-        .topbar__navigation__account__image(
-          v-if="hasProfileImage"
-          :style="`background-image: url(${profileImageUrl})`"
+      .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
+      .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
+    nuxt-link(:to="'/'") Hello World
+    client-only
+      .topbar__navigation
+        button.topbar__navigation__account(
+          v-if="!hasWallet"
+          @click="sendToMetamask"
+        ) Install Wallet
+        button.topbar__navigation__account(
+          v-else
+          @click="handleAccountBtnClick"
         )
-        span {{accountBtnText}}
+          .topbar__navigation__account__image(
+            v-if="hasProfileImage"
+            :style="`background-image: url(${profileImageUrl})`"
+          )
+          span {{accountBtnText}}
 </template>
 
 <script lang="ts">
@@ -41,7 +43,7 @@
     get accountBtnText () {
       if (this.hasThreeBoxProfile) { return this.ownProfile.name }
       if (this.account.length) { return this.account }
-      return this.$t('components.topBar.connectWallet')
+      return 'Connect Wallet'
     }
 
     get hasThreeBoxProfile () {
