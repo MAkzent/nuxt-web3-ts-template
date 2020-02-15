@@ -1,10 +1,11 @@
 <template lang="pug">
 section
-  client-only
-    .topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
+  .topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
+    client-only
       .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
       .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
-      nuxt-link(:to="'/'") Hello World
+    nuxt-link(:to="'/'") Hello World
+    client-only
       .topbar__navigation
         button.topbar__navigation__account(
           v-if="!hasWallet"
