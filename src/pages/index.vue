@@ -8,6 +8,7 @@
       .landing__headline Your Kitties 😼
       .landing__kitties--loading(v-if="!fetched")
         loading-spinner
+      .landing__unlock(v-else-if="ownAddress.length === 0") Connect / Unlock your Wallet to Play
       .landing__kitties(v-else-if="kitties.length > 0")
         kitty-card(
           v-for="kitty in kitties"
@@ -19,7 +20,7 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue, State } from 'nuxt-property-decorator'
+  import { Component, Vue, State, Watch } from 'nuxt-property-decorator'
   import KittyCard from '~/components/molecules/KittyCard.vue'
   import RaidBossCard from '~/components/molecules/RaidBossCard.vue'
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
@@ -40,11 +41,20 @@
       return true
     }
 
+    @Watch('ownAddress')
+    onAddressChanged () {
+      this.loadKitties()
+    }
+
     async beforeMount () {
-     const { assets } = await this.$openSeaService.getKittiesByAccount(this.ownAddress, this.networkId) || {}
-     console.log(assets)
-     if (assets) { this.kitties = assets }
-     this.fetched = true
+     await this.loadKitties()
+    }
+
+    async loadKitties () {
+      this.fetched = false
+      const { assets } = await this.$openSeaService.getKittiesByAccount(this.ownAddress, this.networkId) || {}
+      if (assets) { this.kitties = assets }
+      this.fetched = true
     }
   }
 </script>
@@ -62,6 +72,12 @@
     margin: 1.5rem 0 1rem;
     font-size: 1.2rem;
     font-weight: 300;
+  }
+  &__unlock {
+    text-align: center;
+    margin: 3rem auto;
+    font-size: 1.2rem;
+    opacity: 0.6;
   }
   &__kitties {
     display: grid;
@@ -81,7 +97,7 @@
     &--empty {
       text-align: center;
       margin: 3rem auto;
-      font-weight: 1.2rem;
+      font-size: 1.2rem;
       opacity: 0.6;
     }
   }
