@@ -251,7 +251,7 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
     .modal__container {
       border-radius: 1rem 1rem 0 0;
       box-shadow: 0 -1rem 2rem rgba(0, 0, 0, 0.1);
-      max-width: 960px;
+      max-width: 640px;
     }
   }
 
@@ -268,7 +268,7 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
     .modal__container {
       border-radius: 1rem;
       box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
-      max-width: 960px;
+      max-width: 640px;
     }
 
     .modal__header {
