@@ -1,23 +1,24 @@
 <template lang="pug">
-.topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
-  .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
-  .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
-  nuxt-link(:to="'/'") Hello World
-  .topbar__navigation
-    client-only
-      button.topbar__navigation__account(
-        v-if="!hasWallet"
-        @click="sendToMetamask"
-      ) Install Wallet
-      button.topbar__navigation__account(
-        v-else
-        @click="handleAccountBtnClick"
-      )
-        .topbar__navigation__account__image(
-          v-if="hasProfileImage"
-          :style="`background-image: url(${profileImageUrl})`"
+section
+  client-only
+    .topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
+      .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
+      .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
+      nuxt-link(:to="'/'") Hello World
+      .topbar__navigation
+        button.topbar__navigation__account(
+          v-if="!hasWallet"
+          @click="sendToMetamask"
+        ) Install Wallet
+        button.topbar__navigation__account(
+          v-else
+          @click="handleAccountBtnClick"
         )
-        span {{accountBtnText}}
+          .topbar__navigation__account__image(
+            v-if="hasProfileImage"
+            :style="`background-image: url(${profileImageUrl})`"
+          )
+          span {{accountBtnText}}
 </template>
 
 <script lang="ts">
