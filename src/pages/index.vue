@@ -16,9 +16,13 @@
       .landing__kitties
         .landing__kitties__kitty(
           v-for="kitty in kitties"
-          v-bind:style="{ backgroundColor: `#${kitty.backgroundColor}` }"
+          :style="{ backgroundColor: `#${kitty.backgroundColor}` }"
         )
           img(:src="kitty.imageUrl")
+
+    button(@click="closeTutorial()") Close Tutorial
+
+    .tutorial(v-if="!tutorialViewed") Tutorial
 </template>
 
 <script lang="ts">
@@ -31,6 +35,8 @@
   export default class extends Vue {
     @State ownAddress
     private kitties = []
+    private tutorialViewed = false
+
     scrollToTop () {
       return true
     }
@@ -40,15 +46,9 @@
      if (assets) { this.kitties = assets }
     }
 
-  // getKittyAttributes(tokenId) {
-  //   const element:
-  // }
-
-  // getElementIcon(elementId) {
-  //   switch (elementId) {
-  //     case 1: return ""
-  //   }
-  // }
+    closeTutorial() {
+      return this.tutorialViewed = true
+    }
   }
 </script>
 
