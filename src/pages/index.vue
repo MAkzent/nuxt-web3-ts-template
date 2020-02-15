@@ -11,6 +11,7 @@
           v-for="kitty in kitties"
           :key="kitty.tokenId"
           :kitty="kitty"
+          :isClickable="true"
         )
     modal(
         @modal-close="() => this.showModal = false"
@@ -97,7 +98,7 @@
     }
   }
   &__headline {
-    margin: 1rem 0 1.5rem;
+    margin: 1.5rem 0 1rem;
     font-size: 1.2rem;
     font-weight: 300;
   }
