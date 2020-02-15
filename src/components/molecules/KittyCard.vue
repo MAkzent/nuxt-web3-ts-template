@@ -31,7 +31,7 @@
             .enterBattleModal__body__kitty__img(:style="{ backgroundImage: `url(${kitty.imageUrl})` }")
           section
             .enterBattleModal__body__kitty__name {{kitty.name}}
-            .enterBattleModal__body__kitty__text "I'm ready to Dai."
+            .enterBattleModal__body__kitty__text {{`"${getKittyQuote()}"`}}
         section
           .enterBattleModal__body__title Cattributes
           .enterBattleModal__body__stats
@@ -77,6 +77,7 @@
 <script lang="ts">
   import { Component, Prop, Vue } from 'nuxt-property-decorator'
   import { OpenSeaAssetDetails } from '~/types'
+  import Utils from '~/assets/scripts/Util.js'
   import Modal from '~/components/molecules/Modal.vue'
 @Component({
   components: {
@@ -90,7 +91,12 @@
     private showEnterModal = false
 
     beforeMount () {
-      console.log(this.kitty)
+      console.log(this.kitty);
+    }
+
+    getKittyQuote () {
+      const utils = new Utils
+      return utils.randKittyQuote();
     }
 
     get getStats () {
