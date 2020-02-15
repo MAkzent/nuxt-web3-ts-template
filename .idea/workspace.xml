@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b5ef78da-f077-4b55-b270-a14b44a6d442" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/KittyCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/KittyCard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/TopBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/TopBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/OpenSeaService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/OpenSeaService.js" afterDir="false" />
-    </list>
+    <list default="true" id="b5ef78da-f077-4b55-b270-a14b44a6d442" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -67,7 +62,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/pages/index.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
+            <state relative-caret-position="920">
               <caret line="75" column="5" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
               <folding>
                 <element signature="e#1360#1423#0" expanded="true" />
@@ -362,12 +357,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1581733325325</updated>
-      <workItem from="1581733328163" duration="9671000" />
+      <workItem from="1581733328163" duration="9867000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9671000" />
+    <option name="totallyTimeSpent" value="9867000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
@@ -510,7 +505,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/pages/index.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
+        <state relative-caret-position="920">
           <caret line="75" column="5" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
           <folding>
             <element signature="e#1360#1423#0" expanded="true" />

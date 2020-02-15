@@ -15,7 +15,9 @@
           :kitty="kitty"
           :isClickable="true"
         )
-    modal(
+      .landing__kitties--empty(v-else) No Kitties 🙀
+
+      modal(
         @modal-close="() => this.showModal = false"
         v-if="showModal"
     )
@@ -38,8 +40,6 @@
             button(
                 v-on:click="this.onClick"
             ) {{modalTab === 1 ? "Next" : "Play"}}
-
-      .landing__kitties--empty(v-else) No Kitties 🙀
 </template>
 
 <script lang="ts">
