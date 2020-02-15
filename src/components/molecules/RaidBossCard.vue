@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-  .raidBoss(:style="{ backgroundImage: `url(${require('~/assets/images/enemies/werewolf.png')})`}")
+  .raidBoss(:style="{ backgroundImage: `url(${require('~/assets/images/enemies/golem.png')})`}")
   .raidBoss__stats
     .raidBoss__stats__category HP
     .raidBoss__stats__value
