@@ -41,7 +41,7 @@
     get accountBtnText () {
       if (this.hasThreeBoxProfile) { return this.ownProfile.name }
       if (this.account.length) { return this.account }
-      return this.$t('components.topBar.connectWallet')
+      return 'Connect Wallet'
     }
 
     get hasThreeBoxProfile () {
