@@ -23,6 +23,7 @@
   height: 100%;
 }
 .top-bar {
+  z-index: 999;
   position: sticky;
   top: 0;
   left: 0;

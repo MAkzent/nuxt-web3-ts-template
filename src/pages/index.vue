@@ -2,8 +2,8 @@
 .landing
   .landing__wrapper
     section
-      .landing__headline Raid Boss 👹
       raid-boss-card
+      kitty-squad
     section
       .landing__headline Your Kitties 😼
       .landing__kitties--loading(v-if="!fetched")
@@ -24,12 +24,14 @@
   import KittyCard from '~/components/molecules/KittyCard.vue'
   import RaidBossCard from '~/components/molecules/RaidBossCard.vue'
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
+  import KittySquad from '~/components/organisms/KittySquad.vue'
 
 @Component({
   components: {
     KittyCard,
     RaidBossCard,
-    LoadingSpinner
+    LoadingSpinner,
+    KittySquad
   }
 })
   export default class extends Vue {
