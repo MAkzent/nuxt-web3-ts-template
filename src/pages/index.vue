@@ -42,6 +42,7 @@
     }
 
     @Watch('ownAddress')
+
     onAddressChanged () {
       this.loadKitties()
     }

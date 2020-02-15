@@ -278,8 +278,11 @@ section
 
     &__img {
       margin-left: auto;
-      height: 3rem;
-      filter: drop-shadow(0px 0px 2px rgba($color-swan, 0.5));
+      height: 2.5rem;
+      filter: drop-shadow(0px 0px 2px rgba($color-magikarp, 0.7));
+      @include breakpoint(sm) {
+        height: 3rem;
+      }
     }
 
     span {
