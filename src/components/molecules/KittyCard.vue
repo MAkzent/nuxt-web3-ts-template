@@ -37,13 +37,13 @@
           .enterBattleModal__body__stats
             img(:src="getElementImg")
             span Elemental Attack Damage
-            span {{ getStats.attack }}
+            .enterBattleModal__body__stats__value {{ getStats.attack }}
             img(src="~/assets/images/icons/speed.png")
             span Attack Speed
-            span {{ getStats.speed }}
+            .enterBattleModal__body__stats__value {{ getStats.speed }}
             img(src="~/assets/images/icons/crit.png")
             span Crit Chance
-            span {{ getStats.crit }}
+            .enterBattleModal__body__stats__value {{ getStats.crit }}
         section
           .enterBattleModal__body__title Power Boosts
           .enterBattleModal__body__boosts
@@ -219,6 +219,12 @@
       grid-gap: 1rem;
       align-items: center;
 
+      &__value {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-left: auto;
+      }
+
       img {
         height: 1rem;
         width: auto;
@@ -226,12 +232,6 @@
 
       span {
         display: inline-block;
-
-        &:last-of-type {
-          font-size: 1.1rem;
-          font-weight: bold;
-          margin-left: auto;
-        }
       }
     }
     &__boosts {
