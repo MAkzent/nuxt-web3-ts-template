@@ -20,6 +20,7 @@ section
             :style="`background-image: url(${profileImageUrl})`"
           )
           span {{accountBtnText}}
+        .topbar__info(@click="showInfo = true") ?
 </template>
 
 <script lang="ts">
@@ -31,6 +32,7 @@ section
     @State networkId
 
     public account = ''
+    public showInfo = false
 
     async beforeMount () {
       await this.loadAccount()
@@ -78,7 +80,7 @@ section
     }
 
     handleAccountBtnClick () {
-      if (this.account.length) { window.alert('send to profile') }
+      if (this.account.length) { return }
       return this.enableWallet()
     }
 
@@ -100,7 +102,7 @@ section
 <style lang="scss" scoped>
 .topbar {
   @extend %row;
-  display: relative;
+  position: relative;
   padding: 0.25rem 1rem;
   justify-content: space-between;
   background-color: rgba($color-obsidian, 0.85);
@@ -224,6 +226,22 @@ section
           width: 1.1rem;
         }
       }
+    }
+  }
+
+  &__info {
+    @extend %row;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    padding: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: $color-woodsmoke;
+    color: $color-magikarp;
+
+    &:hover {
+      cursor: pointer;
+      background-color: lighten($color-woodsmoke, 5);
     }
   }
 }
