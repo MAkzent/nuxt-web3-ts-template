@@ -12,15 +12,10 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
         .modal__body
           .modal__bodyInner
             slot
-        .modal__footer--transparent(
-          v-if="$slots.transparentFooter"
-        )
-          slot(name="transparentFooter")
         .modal__footer(v-if="$slots.footer")
           slot(name="footer")
         .modal__footerOneBtn(
           v-if="$slots.footerOneBtn"
-          :class="{'modal__footerOneBtn--transparent': transparentFooter}"
         )
           slot(name="footerOneBtn")
 </template>
