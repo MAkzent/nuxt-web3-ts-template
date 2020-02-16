@@ -56,30 +56,14 @@
     }
 
     async listenForEvents () {
-      const ethService = new EthersService()
-      const contract = await ethService.eventListener()
-      console.log("Contract: ", contract);
-      contract.on('BossAppears', (oldValue, newValue, event) => {
-        console.log('old and new', oldValue, newValue)
-        console.log('BOSS APPEARS: ', event)
-      })
+        this.$ethersService.bossDefeated(this.openModal)
+        this.$ethersService.damageInflicted(this.openModal)
+        this.$ethersService.bossAppears(this.openModal)
 
-      contract.on('BossDefeated', (oldValue, newValue, event) => {
-        console.log('old and new', oldValue, newValue)
-        console.log('BOSS DEFEATED: ', event)
-      })
+    }
 
-      contract.on('DamageInflicted', (oldValue, newValue, event) => {
-        console.log('old and new', oldValue, newValue)
-        console.log('DAMAGE INFLICTED: ', event)
-      })
-
-      const boss = await contract.currentBoss();
-      const bossId = boss.bossId.toString()
-      console.log('boss: ', boss.bossId.toString())
-      // const history = await contract.history(0)
-      // console.log('history: ', history)
-
+    openModal(a,b,c) {
+      console.log(a,b,c)
     }
 
     async loadKitties () {
@@ -88,6 +72,7 @@
       if (assets) { this.kitties = assets }
       this.fetched = true
     }
+
 
   // getKittyAttributes(tokenId) {
   //   const element:

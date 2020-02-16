@@ -30,6 +30,11 @@ export const actions = {
       commit('setOwnProfile', ownProfile)
       commit('setNetworkId', networkId)
     }
+  },
+
+  async triggerResultModal ({commit}, _context) {
+    this.$ethersService.eventListener();
+
   }
 
 }

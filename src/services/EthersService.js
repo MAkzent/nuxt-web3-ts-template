@@ -7,17 +7,37 @@ const provider = new ethers.providers.JsonRpcProvider('https://shared-geth-rinke
 
 
 export default class EthersService {
-  constructor (provider = null, store, options = { dev: false }) {
+  constructor ( store, options = { dev: false }) {
     this.store = store
-    this.provider = provider
     this.options = options
     this.web3 = {}
+    this.contract = new ethers.Contract('0xa4CEEB325423c662Cd41Ae653C00acD73E9b85Dc', DragonKittyABI, provider);
     this.defaultAccount = ''
   }
 
-  async eventListener () {
-    console.log('listening...')
-    return new ethers.Contract('0xa4CEEB325423c662Cd41Ae653C00acD73E9b85Dc', DragonKittyABI, provider)
+  bossAppears (cb) {
+    this.contract.on('BossAppears', (oldValue, newValue, event) => {
+      cb(oldValue, newValue, event);
+    })
+  }
+
+  bossDefeated (cb) {
+    this.contract.on('BossDefeated', (oldValue, newValue, event) => {
+      cb(oldValue, newValue, event);
+    })
 
   }
+
+  damageInflicted (cb) {
+    this.contract.on('DamageInflicted', (oldValue, newValue, event) => {
+      cb(oldValue, newValue, event);
+    })
+
+  }
+
+  currentBoss () {
+    return this.contract.currentBoss();
+  }
+
 }
+
