@@ -40,4 +40,14 @@ export default class OpenSeaService {
   getKittiesByAccount (contractAddress, networkId) {
     return this.fetch(`${this.baseUrl(networkId)}/assets?owner=${contractAddress}&asset_contract_address=${this.ckAddress(networkId)}`)
   }
+
+  getKittiesByTokenIds (array) {
+    if (arr.length === 0) {
+      return "no token IDs present"
+    }
+    let tokenIds = ""
+    array.map(tokenId => tokenIds.concat(`token_ids=${tokenId}&`));
+    return this.fetch(`${this.baseUrl(networkId)}/assets?${tokenIds}asset_contract_address=${this.ckAddress(networkId)}`)
+  }
+
 }
