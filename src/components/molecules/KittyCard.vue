@@ -63,7 +63,7 @@
               span {{bonus.chai}}x
               span Chai
             .enterBattleModal__body__boosts__add
-              span 5 DAI
+              span 1 DAI
               button(
                 @click="subBonus('chai')"
                 :class="{'enterBattleModal__body__boosts__add--disabled': bonus.chai === 0 }"
@@ -77,7 +77,7 @@
               span {{bonus.daiquiri}}x
               span Daiquiri
             .enterBattleModal__body__boosts__add
-              span 10 DAI
+              span 5 DAI
               button(
                 @click="subBonus('daiquiri')"
                 :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daiquiri === 0 }"
@@ -91,7 +91,7 @@
               span {{bonus.daisake}}x
               span Daisake
             .enterBattleModal__body__boosts__add
-              span 20 DAI
+              span 10 DAI
               button(
                 @click="subBonus('daisake')"
                 :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daisake === 0 }"
@@ -100,11 +100,6 @@
                 @click="addBonus('daisake')"
                 :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daisake === 5 }"
               ) +
-      button.dai(
-        @click="approveDai"
-        v-if="!!totalSpent"
-      ) Approve DAI
-      .error(v-if="showError") Tx Cancelled
 
     template(slot="footer")
       button(@click="closeEnterModal") Back
@@ -222,15 +217,6 @@
           }
         }
       }
-    }
-
-    async approveDai () {
-      try {
-          await this.$ethereumService.approveDaiContract(this.ownAddress, this.networkId)
-        } catch (e) {
-          console.log(e)
-          this.showError = true
-        }
     }
 
     closeEnterModal () {
