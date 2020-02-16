@@ -14,12 +14,22 @@ export default class EthersService {
 
   async eventListener() {
     console.log('listening...')
-    let contract = new ethers.Contract("0xa3C921e049a05B2D1a7f47F1c72B5695E504f8cf", DragonKittyABI, provider);
+    let contract = new ethers.Contract("0xE05525610B1aCA141c3179b560d0e325078244AB", DragonKittyABI, provider);
 
-    // contract.on("NewMessage", (oldValue, newValue, event) => {
-    //   console.log('old and new', oldValue, newValue);
-    //   console.log('event: ', event)
-    // });
+    contract.on("BossAppears", (oldValue, newValue, event) => {
+      console.log('old and new', oldValue, newValue);
+      console.log('BOSS APPEARS: ', event)
+    });
+
+    contract.on("BossDefeated", (oldValue, newValue, event) => {
+      console.log('old and new', oldValue, newValue);
+      console.log('BOSS DEFEATED: ', event)
+    });
+
+    contract.on("DamageInflicted", (oldValue, newValue, event) => {
+      console.log('old and new', oldValue, newValue);
+      console.log('DAMAGE INFLICTED: ', event)
+    });
 
     const boss = await contract.currentBoss()
     console.log('boss: ', boss)
