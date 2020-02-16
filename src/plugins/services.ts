@@ -6,7 +6,6 @@ declare module 'vue/types/vue' {
   interface Vue {
     $openSeaService: OpenSeaService,
     $threeBoxService: ThreeBoxService,
-
   }
 }
 
@@ -33,6 +32,7 @@ const servicesPlugin: Plugin = ({ app, isDev }, inject) => {
     app.$axios,
     isDev
   )
+
   inject('openSeaService', openSeaService)
   inject('threeBoxService', threeBoxService)
 }
