@@ -17,22 +17,27 @@
           :isClickable="true"
         )
       .landing__kitties--empty(v-else) No Kitties 🙀
+  result-modal(
+    v-if="showWinnerModal"
+    @modal-close="closeWinnerModal"
+  )
 </template>
 
 <script lang="ts">
   import { Component, Vue, State, Watch } from 'nuxt-property-decorator'
-  import EthersService from '../services/EthersService'
   import KittyCard from '~/components/molecules/KittyCard.vue'
   import RaidBossCard from '~/components/molecules/RaidBossCard.vue'
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
   import KittySquad from '~/components/organisms/KittySquad.vue'
+  import ResultModal from '~/components/molecules/ResultModal.vue'
 
 @Component({
   components: {
     KittyCard,
     RaidBossCard,
     LoadingSpinner,
-    KittySquad
+    KittySquad,
+    ResultModal
   }
 })
   export default class extends Vue {
@@ -40,6 +45,8 @@
     @State networkId
     private kitties = []
     private fetched = false
+    private showWinnerModal = false
+
     scrollToTop () {
       return true
     }
@@ -51,19 +58,23 @@
     }
 
     async beforeMount () {
-     await this.loadKitties()
+      await this.$ethereumService.getIsDaiApproved(this.networkId)
+      await this.loadKitties()
       this.listenForEvents()
     }
 
-    async listenForEvents () {
-        this.$ethersService.bossDefeated(this.openModal)
-        this.$ethersService.damageInflicted(this.openModal)
-        this.$ethersService.bossAppears(this.openModal)
-
+    listenForEvents () {
+      this.$ethersService.bossDefeated(this.openWinnerModal)
+        // this.$ethersService.damageInflicted(this.openModalTwo)
+        // this.$ethersService.bossAppears(this.openModalThree)
     }
 
-    openModal(a,b,c) {
-      console.log(a,b,c)
+    openWinnerModal (_previous, _current, _event) {
+      this.showWinnerModal = true
+    }
+
+    closeWinnerModal () {
+      this.showWinnerModal = false
     }
 
     async loadKitties () {
@@ -72,7 +83,6 @@
       if (assets) { this.kitties = assets }
       this.fetched = true
     }
-
 
   // getKittyAttributes(tokenId) {
   //   const element:
