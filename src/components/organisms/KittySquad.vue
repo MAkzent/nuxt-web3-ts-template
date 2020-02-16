@@ -93,6 +93,7 @@
     &__outer {
       position: relative;
       height: 1rem;
+      margin: 0 auto;
       width: 95%;
       background-color: $color-woodsmoke;
       border-radius: 0.25rem;
