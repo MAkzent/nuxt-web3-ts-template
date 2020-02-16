@@ -55,9 +55,28 @@
       this.listenForEvents()
     }
 
-    listenForEvents () {
+    async listenForEvents () {
       const ethService = new EthersService()
-      ethService.eventListener()
+      const contract = await ethService.eventListener()
+      console.log("Contract: ", contract);
+      contract.on('BossAppears', (oldValue, newValue, event) => {
+        console.log('old and new', oldValue, newValue)
+        console.log('BOSS APPEARS: ', event)
+      })
+
+      contract.on('BossDefeated', (oldValue, newValue, event) => {
+        console.log('old and new', oldValue, newValue)
+        console.log('BOSS DEFEATED: ', event)
+      })
+
+      contract.on('DamageInflicted', (oldValue, newValue, event) => {
+        console.log('old and new', oldValue, newValue)
+        console.log('DAMAGE INFLICTED: ', event)
+      })
+
+      const boss = await contract.currentBoss();
+      console.log('boss: ', boss)
+
     }
 
     async loadKitties () {

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import DragonKittyABI from '../assets/data/ethereum/DragonKittyABI.json'
+import DragonKittyABI from '../assets/data/ethereum/DragonKittyAbi.json'
 
 // const provider = ethers.getDefaultProvider('rinkeby')
 const provider = new ethers.providers.JsonRpcProvider('https://shared-geth-rinkeby.nodes.deploy.radar.tech/?apikey=8f814d34c32fe7c41c2e908a8a2f210531fe0573685304a1');
@@ -17,24 +17,7 @@ export default class EthersService {
 
   async eventListener () {
     console.log('listening...')
-    const contract = new ethers.Contract('0x715345953F69b960557F7E61A2d99E0324261134', DragonKittyABI, provider)
+    return new ethers.Contract('0xa4CEEB325423c662Cd41Ae653C00acD73E9b85Dc', DragonKittyABI, provider)
 
-    contract.on('BossAppears', (oldValue, newValue, event) => {
-      console.log('old and new', oldValue, newValue)
-      console.log('BOSS APPEARS: ', event)
-    })
-
-    contract.on('BossDefeated', (oldValue, newValue, event) => {
-      console.log('old and new', oldValue, newValue)
-      console.log('BOSS DEFEATED: ', event)
-    })
-
-    contract.on('DamageInflicted', (oldValue, newValue, event) => {
-      console.log('old and new', oldValue, newValue)
-      console.log('DAMAGE INFLICTED: ', event)
-    })
-
-    const boss = await contract.currentBoss()
-    console.log('boss: ', boss)
   }
 }

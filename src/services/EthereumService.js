@@ -1,12 +1,12 @@
 import Web3 from 'web3'
 import Notify from 'bnc-notify'
 import ERC721Abi from '~/assets/data/ethereum/ERC721Abi.json'
-import DragonKittyAbi from '~/assets/data/ethereum/DragonKittyABI.json'
+import DragonKittyAbi from '~/assets/data/ethereum/DragonKittyAbi.json'
 import KittyCoreAbi from '~/assets/data/ethereum/KittyCoreAbi.json'
 import { BLOCKNATIVE } from '~/assets/data/non_secret_keys.js'
 
 const DRAGONKITTY_MAIN = '0x64b1Bcc75436BBcbBB5AF0A1fF8337Cc73c4e25d'
-const DRAGONKITTY_RINKEBY = '0x715345953F69b960557F7E61A2d99E0324261134'
+const DRAGONKITTY_RINKEBY = '0xa4CEEB325423c662Cd41Ae653C00acD73E9b85Dc'
 
 const CK_ADDRESS = '0x06012c8cf97bead5deae237070f9587f8e7a266d'
 const CK_ADDRESS_RINKEBY = '0x16baf0de678e52367adc69fd067e5edd1d33e3bf'
