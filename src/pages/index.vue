@@ -51,8 +51,6 @@
 
     async beforeMount () {
      await this.loadKitties()
-     const stats = await this.$apiService.getRaidStats(213)
-     console.log('stats =', stats)
     }
 
     async loadKitties () {
