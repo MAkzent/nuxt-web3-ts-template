@@ -6,14 +6,14 @@ module.exports = {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'
   },
   head: {
-    title: 'Die Kitties Dai',
+    title: 'Die Kitty Dai',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: 'Die Kitties Dai - Let your Kitties join the raid squad to win some Dai.'
+        content: 'Die Kitty Dai - Let your Kitties join the raid squad to win some Dai.'
       }
     ],
     link: [

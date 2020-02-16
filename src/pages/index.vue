@@ -17,6 +17,7 @@
           :isClickable="true"
         )
       .landing__kitties--empty(v-else) No Kitties 🙀
+  result-modal
 </template>
 
 <script lang="ts">
@@ -26,13 +27,15 @@
   import RaidBossCard from '~/components/molecules/RaidBossCard.vue'
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
   import KittySquad from '~/components/organisms/KittySquad.vue'
+  import ResultModal from '~/components/molecules/ResultModal.vue'
 
 @Component({
   components: {
     KittyCard,
     RaidBossCard,
     LoadingSpinner,
-    KittySquad
+    KittySquad,
+    ResultModal
   }
 })
   export default class extends Vue {
