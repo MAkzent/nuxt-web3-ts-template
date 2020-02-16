@@ -1,7 +1,7 @@
 export const state = () => ({
   ownAddress: [],
   ownProfile: {},
-  networkId: 1
+  networkId: 4
 })
 
 export const mutations = {
