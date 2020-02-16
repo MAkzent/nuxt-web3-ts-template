@@ -38,14 +38,9 @@ const servicesPlugin: Plugin = ({ app, isDev }, inject) => {
     app.$axios,
     isDev
   )
-  const ethersService = new EthersService(
-    app.$axios,
-    isDev
-  )
 
   inject('openSeaService', openSeaService)
   inject('threeBoxService', threeBoxService)
-  inject('ethersService', ethersService)
 }
 
 export default servicesPlugin
