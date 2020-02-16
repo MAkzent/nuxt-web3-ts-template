@@ -1,7 +1,7 @@
 export const state = () => ({
   ownAddress: [],
   ownProfile: {},
-  networkId: 1
+  networkId: 4
 })
 
 export const mutations = {
@@ -30,6 +30,11 @@ export const actions = {
       commit('setOwnProfile', ownProfile)
       commit('setNetworkId', networkId)
     }
+  },
+
+  async triggerResultModal ({commit}, _context) {
+    this.$ethersService.eventListener();
+
   }
 
 }

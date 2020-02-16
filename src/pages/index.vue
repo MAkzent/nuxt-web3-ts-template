@@ -55,9 +55,15 @@
       this.listenForEvents()
     }
 
-    listenForEvents () {
-      const ethService = new EthersService()
-      ethService.eventListener()
+    async listenForEvents () {
+        this.$ethersService.bossDefeated(this.openModal)
+        this.$ethersService.damageInflicted(this.openModal)
+        this.$ethersService.bossAppears(this.openModal)
+
+    }
+
+    openModal(a,b,c) {
+      console.log(a,b,c)
     }
 
     async loadKitties () {
@@ -66,6 +72,7 @@
       if (assets) { this.kitties = assets }
       this.fetched = true
     }
+
 
   // getKittyAttributes(tokenId) {
   //   const element:
