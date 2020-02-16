@@ -1,6 +1,6 @@
 <template lang="pug">
 section
-  .raidBoss(:style="{ backgroundImage: `url(${require('~/assets/images/enemies/golem.png')})`}")
+  .raidBoss(:style="{ backgroundImage: `url(${bossImage})`}")
     button.raidBoss__history(@click="showHistoryModal = true") Raid History
     .raidBoss__headline Raid Boss
   .raidBoss__stats
@@ -19,7 +19,7 @@ section
     template(slot="header") Raid History
     .raidHistory__body
       .raidHistory__body__header
-        .raidHistory__body__header__icon(:style="{ backgroundImage: `url(${require('~/assets/images/enemies/golem.png')})`}")
+        .raidHistory__body__header__icon(:style="{ backgroundImage: `url(${bossImage})`}")
       .raidHistory__body__headline Raid Boss Stats
       .raidHistory__body__header__stats
         .raidHistory__body__header__stats__category Element
@@ -65,7 +65,13 @@ section
 
     private showHistoryModal = false
 
-    private bossStats = {}
+    private fetched = false
+
+    private bossStats = {
+      bossId: 0,
+      originalHealth: 0,
+      originalCritDefense: 0
+    }
 
     private killedKitties : Array<KittyInfo> = [
       {
@@ -90,6 +96,7 @@ section
 
     async beforeMount () {
       this.bossStats = await this.$ethereumService.getCurrentBoss(this.networkId)
+      this.fetched = true
     }
 
     closeHistoryModal () {
@@ -103,6 +110,16 @@ section
         speed: Number(tokenId) % 42,
         crit: Number(tokenId) % 12
       }
+    }
+
+    get bossImageId () {
+      if (!this.fetched) { return 100 }
+      const { bossId, originalHealth, originalCritDefense } = this.bossStats
+      return bossId * originalHealth * originalCritDefense % 21
+    }
+
+    get bossImage () {
+      return require(`~/assets/images/enemies/${this.bossImageId}.png`)
     }
 
     getElementImg (elementId) {

@@ -198,10 +198,10 @@ export default class EthereumService {
     const totalValue = Number(chai) * CHAI_BONUS + Number(daiquiri) * DAIQUIRI_BONUS + Number(daisake) * DAISAKE_BONUS
     const contract = await this.getDragonKittyContract(networkId)
     return contract.methods
-      .sacrifice(tokenId, chai, daiquiri, daisake)
+      .sacrifice(tokenId, chai, daiquiri, daisake, 0)
       .send({
         from,
-        value: totalValue
+        value: totalValue // remove in production
       })
       .on('transactionHash', function (hash) {
         notify.hash(hash)
