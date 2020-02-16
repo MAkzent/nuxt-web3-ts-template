@@ -6,7 +6,7 @@ import KittyCoreAbi from '~/assets/data/ethereum/KittyCoreAbi.json'
 import { BLOCKNATIVE } from '~/assets/data/non_secret_keys.js'
 
 const DRAGONKITTY_MAIN = '0x64b1Bcc75436BBcbBB5AF0A1fF8337Cc73c4e25d'
-const DRAGONKITTY_RINKEBY = '0x51Eb1D0Ff72746422E03825f0372a848F0639B3e'
+const DRAGONKITTY_RINKEBY = '0x30dc77f19f1244263d0C98191Aa6566d550f7aCF'
 
 const CK_ADDRESS = '0x06012c8cf97bead5deae237070f9587f8e7a266d'
 const CK_ADDRESS_RINKEBY = '0x16baf0de678e52367adc69fd067e5edd1d33e3bf'
@@ -181,7 +181,11 @@ export default class EthereumService {
   }
 
   // most standard ERC721 method implemented:
-  async enterRaid (from, tokenId, networkId, callbackAfterSend = () => {}) {
+  async enterRaid (from, tokenId, networkId, bonus, callbackAfterSend = () => {}) {
+    const CHAI_BONUS = 5000000000000000
+    const DAIQUIRI_BONUS = 20000000000000000
+    const DAISAKE_BONUS = 35000000000000000
+
     const notify = Notify({
       dappId: BLOCKNATIVE, // [String] The API key created by step one above
       networkId // [Integer] The Ethereum network ID your Dapp uses.
@@ -190,10 +194,15 @@ export default class EthereumService {
     notify.config({
       mobilePosition: 'top'
     })
+    const { chai, daiquiri, daisake } = bonus
+    const totalValue = Number(chai) * CHAI_BONUS + Number(daiquiri) * DAIQUIRI_BONUS + Number(daisake) * DAISAKE_BONUS
     const contract = await this.getDragonKittyContract(networkId)
     return contract.methods
       .sacrifice(tokenId)
-      .send({ from })
+      .send({
+        from,
+        value: totalValue
+      })
       .on('transactionHash', function (hash) {
         notify.hash(hash)
       })

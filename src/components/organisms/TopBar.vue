@@ -4,8 +4,7 @@ section
     client-only
       .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
       .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
-    nuxt-link(:to="'/'") Hello World
-    client-only
+      nuxt-link(:to="'/'") Hello World
       .topbar__navigation
         button.topbar__navigation__account(
           v-if="!hasWallet"
