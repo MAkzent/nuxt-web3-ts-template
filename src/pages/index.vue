@@ -21,11 +21,11 @@
 
 <script lang="ts">
   import { Component, Vue, State, Watch } from 'nuxt-property-decorator'
+  import EthersService from '../services/EthersService'
   import KittyCard from '~/components/molecules/KittyCard.vue'
   import RaidBossCard from '~/components/molecules/RaidBossCard.vue'
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
   import KittySquad from '~/components/organisms/KittySquad.vue'
-  import EthersService from '../services/EthersService'
 
 @Component({
   components: {
@@ -55,10 +55,9 @@
       this.listenForEvents()
     }
 
-    async listenForEvents () {
-      const ethService = new EthersService;
-      ethService.eventListener();
-
+    listenForEvents () {
+      const ethService = new EthersService()
+      ethService.eventListener()
     }
 
     async loadKitties () {
@@ -67,7 +66,6 @@
       if (assets) { this.kitties = assets }
       this.fetched = true
     }
-
 
   // getKittyAttributes(tokenId) {
   //   const element:

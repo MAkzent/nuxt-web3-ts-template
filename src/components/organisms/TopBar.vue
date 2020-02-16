@@ -47,7 +47,7 @@ section
 
 <script lang="ts">
   import { Component, Vue, State } from 'nuxt-property-decorator'
-  import Modal from '~/components/molecules/Modal.vue';
+  import Modal from '~/components/molecules/Modal.vue'
 
 @Component({
   components: {
@@ -68,14 +68,13 @@ section
       await this.loadAccount()
     }
 
-  onClick() {
+  onClick () {
     if (this.modalTab === 2) {
       this.showModal = false
       this.modalTab = 1
     } else {
       this.modalTab = 2
     }
-
   }
 
     get hasWallet (): Boolean {
@@ -360,9 +359,6 @@ section
             max-width: 10rem;
             max-height: 10rem;
         }
-    }
-    &__content {
-
     }
 }
 </style>

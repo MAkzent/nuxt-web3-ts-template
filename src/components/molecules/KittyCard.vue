@@ -34,7 +34,7 @@
             .enterBattleModal__body__kitty__img(:style="{ backgroundImage: `url(${kitty.imageUrl})` }")
           section
             .enterBattleModal__body__kitty__name {{kitty.name}}
-            .enterBattleModal__body__kitty__text {{`"${getKittyQuote()}"`}}
+            .enterBattleModal__body__kitty__text {{`"${getKittyQuote}"`}}
         section
           .enterBattleModal__body__title Cattributes
           .enterBattleModal__body__stats
@@ -144,16 +144,11 @@
 
     private showEnterModal = false
 
-    async beforeMount () {
-      console.log(this.kitty);
-      this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
-
+    get getKittyQuote () {
+      const utils = new Utils()
+      return utils.randKittyQuote()
     }
 
-    getKittyQuote () {
-      const utils = new Utils
-      return utils.randKittyQuote();
-    }
     private isSending = false
     private isApproved = false
     private showError = false
