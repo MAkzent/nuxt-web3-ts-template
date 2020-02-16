@@ -23,7 +23,7 @@ export default class EthereumService {
 
   getWeb3 () {
     if (this.provider === null) {
-      this.web3 = new Web3()
+      this.web3 = new Web3('https://shared-geth-rinkeby.nodes.deploy.radar.tech/?apikey=8f814d34c32fe7c41c2e908a8a2f210531fe0573685304a1')
       return
     }
 

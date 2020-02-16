@@ -1,7 +1,9 @@
 import { ethers } from 'ethers'
 import DragonKittyABI from '../assets/data/ethereum/DragonKittyABI.json'
 
-const provider = ethers.getDefaultProvider('rinkeby')
+// const provider = ethers.getDefaultProvider('rinkeby')
+const provider = new ethers.providers.JsonRpcProvider('https://shared-geth-rinkeby.nodes.deploy.radar.tech/?apikey=8f814d34c32fe7c41c2e908a8a2f210531fe0573685304a1');
+
 
 export default class EthersService {
   constructor (provider = null, store, options = { dev: false }) {
