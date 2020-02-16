@@ -12,15 +12,10 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
         .modal__body
           .modal__bodyInner
             slot
-        .modal__footer--transparent(
-          v-if="$slots.transparentFooter"
-        )
-          slot(name="transparentFooter")
         .modal__footer(v-if="$slots.footer")
           slot(name="footer")
         .modal__footerOneBtn(
           v-if="$slots.footerOneBtn"
-          :class="{'modal__footerOneBtn--transparent': transparentFooter}"
         )
           slot(name="footerOneBtn")
 </template>
@@ -251,7 +246,7 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
     .modal__container {
       border-radius: 1rem 1rem 0 0;
       box-shadow: 0 -1rem 2rem rgba(0, 0, 0, 0.1);
-      max-width: 960px;
+      max-width: 640px;
     }
   }
 
@@ -268,7 +263,7 @@ transition(:name="transitionName" @after-enter="$emit('modal-open')" appear)
     .modal__container {
       border-radius: 1rem;
       box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
-      max-width: 960px;
+      max-width: 640px;
     }
 
     .modal__header {

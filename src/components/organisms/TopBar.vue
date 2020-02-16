@@ -1,38 +1,83 @@
 <template lang="pug">
-.topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
-  .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
-  .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
-  nuxt-link(:to="'/'") Hello World
-  .topbar__navigation
+section
+  .topbar(:class="{'topbar--rinkeby': isRinkeby, 'topbar--unsupported': isUnsupportedNet }" )
     client-only
-      button.topbar__navigation__account(
-        v-if="!hasWallet"
-        @click="sendToMetamask"
-      ) Install Wallet
-      button.topbar__navigation__account(
-        v-else
-        @click="handleAccountBtnClick"
-      )
-        .topbar__navigation__account__image(
-          v-if="hasProfileImage"
-          :style="`background-image: url(${profileImageUrl})`"
+      .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
+      .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
+    nuxt-link(:to="'/'") Hello World
+    client-only
+      .topbar__navigation
+        button.topbar__navigation__account(
+          v-if="!hasWallet"
+          @click="sendToMetamask"
+        ) Install Wallet
+        button.topbar__navigation__account(
+          v-else
+          @click="handleAccountBtnClick"
         )
-        span {{accountBtnText}}
+          .topbar__navigation__account__image(
+            v-if="hasProfileImage"
+            :style="`background-image: url(${profileImageUrl})`"
+          )
+          span {{accountBtnText}}
+        .topbar__info(@click="showModal = true") ?
+      modal(
+      @modal-close="() => this.showModal = false"
+      v-if="showModal"
+      )
+          template(
+          slot="header"
+          v-if="modalTab === 1"
+          )
+              img.modal__image(src="~/assets/images/icons/kitty-dai.png")
+          template(
+          slot="header"
+          v-else
+          )
+              img.modal__image__large(src="~/assets/images/enemies/werewolf.png")
+
+          .modal__content(v-if="modalTab === 1") Earn DAI battling your CryptoKitties to the death
+          .modal__content(v-else) Your kitty just may be the one to beat the Raid Boss to claim victory 💰from the kitties that came before you
+          template(
+          slot="footerOneBtn"
+          )
+              button(
+              v-on:click="this.onClick"
+              ) {{modalTab === 1 ? "Next" : "Play"}}
 </template>
 
 <script lang="ts">
   import { Component, Vue, State } from 'nuxt-property-decorator'
-@Component({})
+  import Modal from '~/components/molecules/Modal.vue';
+
+@Component({
+  components: {
+    Modal
+  }
+})
   export default class TopBar extends Vue {
     @State ownProfile
     @State ownAddress
     @State networkId
 
     public account = ''
+    public showInfo = false
+    private showModal = false
+    private modalTab = 1
 
     async beforeMount () {
       await this.loadAccount()
     }
+
+  onClick() {
+    if (this.modalTab === 2) {
+      this.showModal = false
+      this.modalTab = 1
+    } else {
+      this.modalTab = 2
+    }
+
+  }
 
     get hasWallet (): Boolean {
       return this.$ethereumService.hasWallet
@@ -41,7 +86,7 @@
     get accountBtnText () {
       if (this.hasThreeBoxProfile) { return this.ownProfile.name }
       if (this.account.length) { return this.account }
-      return this.$t('components.topBar.connectWallet')
+      return 'Connect Wallet'
     }
 
     get hasThreeBoxProfile () {
@@ -76,7 +121,7 @@
     }
 
     handleAccountBtnClick () {
-      if (this.account.length) { window.alert('send to profile') }
+      if (this.account.length) { return }
       return this.enableWallet()
     }
 
@@ -98,7 +143,7 @@
 <style lang="scss" scoped>
 .topbar {
   @extend %row;
-  display: relative;
+  position: relative;
   padding: 0.25rem 1rem;
   justify-content: space-between;
   background-color: rgba($color-obsidian, 0.85);
@@ -224,6 +269,22 @@
       }
     }
   }
+
+  &__info {
+    @extend %row;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+    padding: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: $color-woodsmoke;
+    color: $color-magikarp;
+
+    &:hover {
+      cursor: pointer;
+      background-color: lighten($color-woodsmoke, 5);
+    }
+  }
 }
 
 .dropdown {
@@ -286,5 +347,23 @@
       cursor: pointer;
     }
   }
+
+}
+.modal {
+    &__image {
+        width: auto;
+        height: auto;
+        max-width: 5rem;
+        max-height: 5rem;
+        &__large {
+            width: auto;
+            height: auto;
+            max-width: 10rem;
+            max-height: 10rem;
+        }
+    }
+    &__content {
+
+    }
 }
 </style>
