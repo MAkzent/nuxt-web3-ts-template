@@ -6,6 +6,7 @@ import {
   enableBodyScroll,
   clearAllBodyScrollLocks
 } from 'body-scroll-lock'
+import Content from '../data/content/content'
 
 export default class Util {
   getCookieMaxAge (type) {
@@ -67,5 +68,9 @@ export default class Util {
 
   bodyScrollLockClear () {
     clearAllBodyScrollLocks()
+  }
+
+  randKittyQuote () {
+    return Content.kitty_quotes[Math.floor(Math.random() * Content.kitty_quotes.length)]
   }
 }

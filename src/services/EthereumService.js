@@ -1,7 +1,15 @@
 import Web3 from 'web3'
 import Notify from 'bnc-notify'
 import ERC721Abi from '~/assets/data/ethereum/ERC721Abi.json'
+import DragonKittyAbi from '~/assets/data/ethereum/DragonKittyAbi.json'
+import KittyCoreAbi from '~/assets/data/ethereum/KittyCoreAbi.json'
 import { BLOCKNATIVE } from '~/assets/data/non_secret_keys.js'
+
+const DRAGONKITTY_MAIN = '0x64b1Bcc75436BBcbBB5AF0A1fF8337Cc73c4e25d'
+const DRAGONKITTY_RINKEBY = '0xa4CEEB325423c662Cd41Ae653C00acD73E9b85Dc'
+
+const CK_ADDRESS = '0x06012c8cf97bead5deae237070f9587f8e7a266d'
+const CK_ADDRESS_RINKEBY = '0x16baf0de678e52367adc69fd067e5edd1d33e3bf'
 
 export default class EthereumService {
   constructor (provider = null, store, options = { dev: false }) {
@@ -15,7 +23,8 @@ export default class EthereumService {
 
   getWeb3 () {
     if (this.provider === null) {
-      this.web3 = new Web3()
+      this.web3 = new Web3('https://shared-geth-rinkeby.nodes.deploy.radar.tech/?apikey=8f814d34c32fe7c41c2e908a8a2f210531fe0573685304a1')
+      // this.web3 = new Web3('https://shared-parity-mainnet.nodes.deploy.radar.tech/?apikey=7d9c7347814ae1a0630063de2a5df8f8d9be7d6a487dc7ad')
       return
     }
 
@@ -139,6 +148,16 @@ export default class EthereumService {
     return new this.web3.eth.Contract(ERC721Abi, address)
   }
 
+  getDragonKittyContract (networkId) {
+    const contractAddress = networkId === 1 ? DRAGONKITTY_MAIN : DRAGONKITTY_RINKEBY
+    return new this.web3.eth.Contract(DragonKittyAbi, contractAddress)
+  }
+
+  getKittyCoreContract (networkId) {
+    const contractAddress = networkId === 1 ? CK_ADDRESS : CK_ADDRESS_RINKEBY
+    return new this.web3.eth.Contract(KittyCoreAbi, contractAddress)
+  }
+
   async getGasPriceInGwei () {
     let gasPriceInGwei = await this.web3.eth.getGasPrice()
     if (gasPriceInGwei < this.web3.utils.toWei('5', 'gwei')) {
@@ -163,44 +182,65 @@ export default class EthereumService {
   }
 
   // most standard ERC721 method implemented:
-  async sendAsset (contractAddress, from, to, tokenId, networkId, callbackAfterSend = () => {}) {
+  async enterRaid (from, tokenId, networkId, bonus, callbackAfterSend = () => {}) {
+    const CHAI_BONUS = 5000000000000000
+    const DAIQUIRI_BONUS = 20000000000000000
+    const DAISAKE_BONUS = 35000000000000000
+
     const notify = Notify({
       dappId: BLOCKNATIVE, // [String] The API key created by step one above
       networkId // [Integer] The Ethereum network ID your Dapp uses.
     })
 
     notify.config({
-      mobilePosition: 'bottom'
+      mobilePosition: 'top'
     })
-
-    const contract = await this.getERC721Contract(contractAddress)
+    const { chai, daiquiri, daisake } = bonus
+    const totalValue = Number(chai) * CHAI_BONUS + Number(daiquiri) * DAIQUIRI_BONUS + Number(daisake) * DAISAKE_BONUS
+    const contract = await this.getDragonKittyContract(networkId)
     return contract.methods
-      .safeTransferFrom(from, to, tokenId)
-      .send({ from })
+      .sacrifice(tokenId, chai, daiquiri, daisake, 0)
+      .send({
+        from,
+        value: totalValue // remove in production
+      })
       .on('transactionHash', function (hash) {
         notify.hash(hash)
-        callbackAfterSend()
       })
       .on('receipt', function (receipt) {
         console.info(receipt)
+        callbackAfterSend()
       })
   }
 
+  async getCurrentBoss (networkId) {
+    const contract = await this.getDragonKittyContract(networkId)
+    return contract.methods.currentBoss().call()
+  }
+
+  async getIsKittyApproved (kittyId, networkId) {
+    const dragonContract = networkId === 1 ? DRAGONKITTY_MAIN : DRAGONKITTY_RINKEBY
+    const contract = await this.getKittyCoreContract(networkId)
+    const approvedAddress = await contract.methods.kittyIndexToApproved(kittyId).call()
+    return dragonContract.toLowerCase() === approvedAddress.toLowerCase()
+  }
+
   // example for ERC721 method call
-  async approveContract (contractAddress, converterAddress, fromAddress, networkId, callbackAfterSend = () => {}) {
+  async approveContract (kittyId, fromAddress, networkId) {
+    const dragonKittyContract = networkId === 1 ? DRAGONKITTY_MAIN : DRAGONKITTY_RINKEBY
     const notify = Notify({
       dappId: BLOCKNATIVE, // [String] The API key created by step one above
       networkId // [Integer] The Ethereum network ID your Dapp uses.
     })
 
     notify.config({
-      mobilePosition: 'bottom'
+      mobilePosition: 'top'
     })
 
-    const contract = await this.getERC721Contract(contractAddress)
+    const contract = await this.getKittyCoreContract(networkId)
     const gasPriceInGwei = await this.getGasPriceInGwei()
     return contract.methods
-      .setApprovalForAll(converterAddress, true)
+      .approve(dragonKittyContract, kittyId)
       .send({
         from: fromAddress,
         gasPrice: gasPriceInGwei,
@@ -208,10 +248,6 @@ export default class EthereumService {
       })
       .on('transactionHash', function (hash) {
         notify.hash(hash)
-        callbackAfterSend()
-      })
-      .on('receipt', function (receipt) {
-        console.info(receipt)
       })
   }
 }

@@ -40,3 +40,12 @@ export interface Profile {
 interface ImageInfo {
   contentUrl: Object;
 }
+
+// Kitties
+
+export interface KittyInfo {
+  tokenId: string,
+  backgroundColor: string,
+  imageUrl: string,
+  damage: string
+}
