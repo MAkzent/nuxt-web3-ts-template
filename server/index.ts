@@ -1,3 +1,4 @@
+const ethers = require('ethers')
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
@@ -181,10 +182,55 @@ function setupKittyAPI() {
     return res.status(200).send(getKittyStats(id));
   });
 
-  app.all('/api/boss/:id', (req, res) => {
+  app.all('/api/boss/:id', async (req, res) => {
     const {id} = req.params;
-    return res.status(200).send(getBossInfo(id));
+    return res.status(200).send(await getBossInfo2(id));
   });
+
+  async function getBossInfo2(id)
+  {
+    let provider = ethers.getDefaultProvider('rinkeby');
+
+    const contractAddress = '0xa4CEEB325423c662Cd41Ae653C00acD73E9b85Dc';
+    const dragonKittyAbi = require('../src/assets/data/ethereum/DragonKittyABI.json')
+
+    let contract = await new ethers.Contract(contractAddress, dragonKittyAbi, provider);
+
+    var result;
+
+    try {
+      var history = await contract.history(Number(id))
+      var bossId = parseInt(history.bossId);
+      var startIndex = parseInt(history.startIndex);
+      var recordLength = parseInt(history.recordLength);
+
+      var resultArray : any[] = [];
+      for (var i = 0; i < recordLength; i++)
+      {
+        var kitty = await contract.records(startIndex + i);
+        var kittyObject = {
+          bossId: parseInt(kitty.bossId),
+          kittyId: parseInt(kitty.kittyId),
+          damage: kitty.damage,
+          criticalHit: kitty.criticalHit,
+          winner: kitty.winner
+        }
+
+        resultArray.push(kittyObject);
+      }
+
+      result = JSON.stringify(resultArray);
+
+    } catch (e) {
+      console.log(e);
+      result = {
+        error: "boss not found"
+      }
+    }
+
+    return result;
+  }
+
 }
 
 
