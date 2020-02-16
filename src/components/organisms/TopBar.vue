@@ -33,7 +33,7 @@ section
           slot="header"
           v-else
           )
-              img.modal__image__large(src="~/assets/images/enemies/werewolf.png")
+              img.modal__image__large(src="~/assets/images/enemies/2.png")
 
           .modal__content(v-if="modalTab === 1") Earn DAI battling your CryptoKitties to the death
           .modal__content(v-else) Your kitty just may be the one to beat the Raid Boss to claim victory 💰from the kitties that came before you
