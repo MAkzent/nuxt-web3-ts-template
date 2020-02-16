@@ -4,12 +4,12 @@ section
     button.raidBoss__history(@click="showHistoryModal = true") Raid History
     .raidBoss__headline Raid Boss
   .raidBoss__stats
-    .raidBoss__stats__category HP
+    .raidBoss__stats__category 💛 Health
     .raidBoss__stats__value
-      small 50,000 /
-      span 32,423
-    .raidBoss__stats__category Eaten 🤑
-    .raidBoss__stats__value 30
+      span {{ bossStats.health }}
+      small / {{ bossStats.originalHealth }}
+    .raidBoss__stats__category 🤑 Eaten Kitties
+    .raidBoss__stats__value {{ bossStats.kittiesSlayed }}
 
   modal.raidHistory(
     v-if="showHistoryModal"
@@ -52,7 +52,7 @@ section
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Vue, State } from 'nuxt-property-decorator'
   import { KittyInfo } from '~/types'
   import Modal from '~/components/molecules/Modal.vue'
 @Component({
@@ -61,9 +61,11 @@ section
   }
 })
   export default class MyComponent extends Vue {
-    @Prop() propName!: string
+    @State networkId
 
     private showHistoryModal = false
+
+    private bossStats = {}
 
     private killedKitties : Array<KittyInfo> = [
       {
@@ -85,6 +87,10 @@ section
         damage: '24'
       }
     ]
+
+    async beforeMount () {
+      this.bossStats = await this.$ethereumService.getCurrentBoss(this.networkId)
+    }
 
     closeHistoryModal () {
       this.showHistoryModal = false
@@ -161,7 +167,7 @@ section
         font-size: 0.9rem;
         display: inline-block;
         opacity: 0.7;
-        margin-right: 0.5rem;
+        margin-left: 0.5rem;
       }
     }
   }

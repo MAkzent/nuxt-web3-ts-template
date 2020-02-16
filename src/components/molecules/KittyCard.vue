@@ -1,8 +1,11 @@
 <template lang="pug">
 .kitty(
   v-bind:style="{ backgroundColor: `#${kitty.backgroundColor}`}"
+  :class="{'kitty--notApproved': !isApproved}"
   @click="handleKittyClick"
 )
+  .kitty__approve(v-if="!isApproved")
+    button Approve
   img(:src="kitty.imageUrl")
   .kitty__attributes
     .kitty__attributes__value
@@ -71,22 +74,43 @@
 
     template(slot="footer")
       button(@click="closeEnterModal") Back
-      button.enterBattleModal__fight ⚔️ Fight
+      button.enterBattleModal__fight(:disabled="isSending" @click="fight")
+        section(v-if="isSending")
+          .enterBattleModal--loading
+            loading-spinner
+          span Entering
+        span(v-else) ⚔️ Fight
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Prop, Vue, State } from 'nuxt-property-decorator'
   import { OpenSeaAssetDetails } from '~/types'
   import Utils from '~/assets/scripts/Util.js'
+  import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
   import Modal from '~/components/molecules/Modal.vue'
+
+  const ATTACK_CAP = 128
+  const SPEED_CAP = 64
+  const CRIT_CAP = 16
+  const ELEMENT_TYPES = {
+    Earth: 0,
+    Water: 1,
+    Fire: 2,
+    Wind: 3,
+    Void: 4
+  }
+
 @Component({
   components: {
-    Modal
+    Modal,
+    LoadingSpinner
   }
 })
   export default class KittyCard extends Vue {
     @Prop() kitty!: OpenSeaAssetDetails
     @Prop({ default: false }) isClickable?: boolean
+    @State networkId
+    @State ownAddress
 
     private showEnterModal = false
 
@@ -98,13 +122,16 @@
       const utils = new Utils
       return utils.randKittyQuote();
     }
+    private isSending = false
+    private isApproved = false
 
     get getStats () {
+      const kittyGene = this.kitty.tokenId
       return {
-        attack: Number(this.kitty.tokenId) % 102,
-        element: Number(this.kitty.tokenId) % 5,
-        speed: Number(this.kitty.tokenId) % 42,
-        crit: Number(this.kitty.tokenId) % 12
+        attack: Number(kittyGene) % ATTACK_CAP,
+        speed: Number(kittyGene) % SPEED_CAP,
+        crit: Number(kittyGene) % CRIT_CAP,
+        element: Number(kittyGene) % Object.keys(ELEMENT_TYPES).length
       }
     }
 
@@ -119,25 +146,57 @@
       }
     }
 
-    handleKittyClick () {
+    async beforeMount () {
+      this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
+    }
+
+    async handleKittyClick () {
       if (this.isClickable) {
-        this.showEnterModal = true
+        if (this.isApproved) {
+          this.showEnterModal = true
+        } else {
+          await this.$ethereumService.approveContract(this.kitty.tokenId, this.ownAddress, this.networkId)
+          location.reload()
+        }
       }
     }
 
     closeEnterModal () {
       this.showEnterModal = false
     }
+
+    async fight () {
+      this.isSending = true
+      await this.$ethereumService.enterRaid(this.ownAddress, this.kitty.tokenId, this.networkId, () => location.reload())
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 .kitty{
-  display: relative;
   border-radius: 0.25rem;
   transition: 0.1s ease-in-out;
   > img {
     display: flex;
+  }
+
+  &--notApproved {
+    position: relative;
+  }
+
+  &__approve {
+    @extend %row;
+    border-radius: 0.25rem;
+    position: absolute;
+    background-color: rgba($color-obsidian, 0.6);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    button {
+      @extend %btn-primary;
+    }
   }
 
   &:hover {
@@ -151,7 +210,6 @@
     font-family: $font-mono;
     background-color: rgba($color-woodsmoke, 0.9);
     padding: 0.35rem 0.75rem;
-    margin: 0 0.5rem 0.25rem;
     border-radius: 0.25rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -292,10 +350,19 @@
   }
 
   &__fight {
+    @extend %row;
     background-color: $color-gossip !important;
     &:hover {
       background-color: darken($color-gossip, 5) !important;
     }
+  }
+
+  &--loading {
+    display: inline-block;
+    height: 0.8rem;
+    width: 0.8rem;
+    margin-right: 0.5rem;
+    border-color: $color-swan !important;
   }
 }
 </style>

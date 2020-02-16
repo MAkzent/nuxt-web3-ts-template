@@ -1,7 +1,10 @@
 const env = require('dotenv').config()
 
-export default {
-  env: env.parsed,
+module.exports = {
+  env: {
+    ...env.parsed,
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
   head: {
     title: 'Die Kitties Dai',
     meta: [
