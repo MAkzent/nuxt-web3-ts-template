@@ -1,40 +1,51 @@
 <template lang="pug">
 .squad
   .squad__details
-    .squad__headline Current Raid Squad
+    .squad__headline Crit DMG Bonus
     .squad__stats
-      span {{ squadSize }}
+      span {{ critAdded }}
       small /
-      small {{ maxSquad }}
+      small {{ maxDefense }}
   .squad__progress
     .squad__progress__outer
-      img.squad__progress__outer__cat(src="~/assets/images/icons/squad.png")
+      img.squad__progress__outer__cat(
+        :style="{'left': `calc(${squadPercent}% - 0.5rem)`}"
+        src="~/assets/images/icons/squad.png"
+      )
       img.squad__progress__outer__battle(src="~/assets/images/icons/battle.png")
       .squad__progress__inner(:style="{'width': `${squadPercent}%`}")
 
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue } from 'nuxt-property-decorator'
+  import { Component, Vue, State } from 'nuxt-property-decorator'
 
-  const MAX_SQUAD = 10
 @Component({
   components: {
   }
 })
   export default class KittySquad extends Vue {
-    @Prop() propName!: string
+    @State networkId
 
-    get squadSize () {
-      return 4
+    private bossStats = {
+      originalCritDefense: 0,
+      critDefense: 0
     }
 
-    get maxSquad () {
-      return MAX_SQUAD
+    get critAdded () {
+      return this.bossStats.originalCritDefense - this.bossStats.critDefense
+    }
+
+    get maxDefense () {
+      return this.bossStats.originalCritDefense
     }
 
     get squadPercent () {
-      return this.squadSize / this.maxSquad * 100
+      return this.critAdded / this.maxDefense * 100
+    }
+
+    async beforeMount () {
+      this.bossStats = await this.$ethereumService.getCurrentBoss(this.networkId)
     }
   }
 </script>
@@ -91,7 +102,6 @@
         height: 2rem;
         width: auto;
         position: absolute;
-        left: calc(40% - 0.5rem);
         top: -80%;
       }
       &__battle {

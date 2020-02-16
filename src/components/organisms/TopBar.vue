@@ -4,8 +4,7 @@ section
     client-only
       .topbar__rinkebyLogo(v-if="isRinkeby") Rinkeby
       .topbar__unsupported(v-if="isUnsupportedNet") Unsupported Network
-    nuxt-link(:to="'/'") Hello World
-    client-only
+      nuxt-link(:to="'/'") Hello World
       .topbar__navigation
         button.topbar__navigation__account(
           v-if="!hasWallet"
@@ -48,7 +47,7 @@ section
 
 <script lang="ts">
   import { Component, Vue, State } from 'nuxt-property-decorator'
-  import Modal from '~/components/molecules/Modal.vue';
+  import Modal from '~/components/molecules/Modal.vue'
 
 @Component({
   components: {
@@ -69,14 +68,13 @@ section
       await this.loadAccount()
     }
 
-  onClick() {
+  onClick () {
     if (this.modalTab === 2) {
       this.showModal = false
       this.modalTab = 1
     } else {
       this.modalTab = 2
     }
-
   }
 
     get hasWallet (): Boolean {
@@ -361,9 +359,6 @@ section
             max-width: 10rem;
             max-height: 10rem;
         }
-    }
-    &__content {
-
     }
 }
 </style>

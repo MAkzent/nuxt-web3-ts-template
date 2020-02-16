@@ -34,43 +34,73 @@
             .enterBattleModal__body__kitty__img(:style="{ backgroundImage: `url(${kitty.imageUrl})` }")
           section
             .enterBattleModal__body__kitty__name {{kitty.name}}
-            .enterBattleModal__body__kitty__text {{`"${getKittyQuote()}"`}}
+            .enterBattleModal__body__kitty__text {{`"${getKittyQuote}"`}}
         section
           .enterBattleModal__body__title Cattributes
           .enterBattleModal__body__stats
             img(:src="getElementImg")
             span Elemental Damage
-            .enterBattleModal__body__stats__value {{ getStats.attack }}
+            .enterBattleModal__body__stats__value(
+              :class="{'enterBattleModal__body__stats__value--boost': !(getStats.attack === getAttack) }"
+            ) {{ getAttack }}
             img(src="~/assets/images/icons/speed.png")
             span Attack Speed
-            .enterBattleModal__body__stats__value {{ getStats.speed }}
+            .enterBattleModal__body__stats__value(
+              :class="{'enterBattleModal__body__stats__value--boost': !(getStats.speed === getSpeed) }"
+            ) {{ getSpeed }}
             img(src="~/assets/images/icons/crit.png")
             span Crit Chance
-            .enterBattleModal__body__stats__value {{ getStats.crit }}
+            .enterBattleModal__body__stats__value(
+              :class="{'enterBattleModal__body__stats__value--boost': !(getStats.crit === getCrit) }"
+            ) {{ getCrit }}
         section
-          .enterBattleModal__body__title Power Boosts
+          .enterBattleModal__body__title
+            span Power Boosts
+            span +{{totalSpent}} DAI
           .enterBattleModal__body__boosts
             .enterBattleModal__body__boosts__img
               img(src="~/assets/images/icons/chai.png")
-              span 0x
+              span {{bonus.chai}}x
               span Chai
             .enterBattleModal__body__boosts__add
               span 5 DAI
-              span +
+              button(
+                @click="subBonus('chai')"
+                :class="{'enterBattleModal__body__boosts__add--disabled': bonus.chai === 0 }"
+              ) -
+              button(
+                @click="addBonus('chai')"
+                :class="{'enterBattleModal__body__boosts__add--disabled': bonus.chai === 5 }"
+              ) +
             .enterBattleModal__body__boosts__img
               img(src="~/assets/images/icons/daiquiri.png")
-              span 0x
+              span {{bonus.daiquiri}}x
               span Daiquiri
             .enterBattleModal__body__boosts__add
               span 10 DAI
-              span +
+              button(
+                @click="subBonus('daiquiri')"
+                :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daiquiri === 0 }"
+              ) -
+              button(
+                @click="addBonus('daiquiri')"
+                :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daiquiri === 5 }"
+              ) +
             .enterBattleModal__body__boosts__img
               img(src="~/assets/images/icons/znarkmeister.png")
-              span 0x
+              span {{bonus.daisake}}x
               span Daisake
             .enterBattleModal__body__boosts__add
               span 20 DAI
-              span +
+              button(
+                @click="subBonus('daisake')"
+                :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daisake === 0 }"
+              ) -
+              button(
+                @click="addBonus('daisake')"
+                :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daisake === 5 }"
+              ) +
+      .error(v-if="showError") Tx Cancelled
 
     template(slot="footer")
       button(@click="closeEnterModal") Back
@@ -114,18 +144,19 @@
 
     private showEnterModal = false
 
-    async beforeMount () {
-      console.log(this.kitty);
-      this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
-
+    get getKittyQuote () {
+      const utils = new Utils()
+      return utils.randKittyQuote()
     }
 
-    getKittyQuote () {
-      const utils = new Utils
-      return utils.randKittyQuote();
-    }
     private isSending = false
     private isApproved = false
+    private showError = false
+    private bonus = {
+      chai: 0,
+      daiquiri: 0,
+      daisake: 0
+    }
 
     get getStats () {
       const kittyGene = this.kitty.tokenId
@@ -148,24 +179,73 @@
       }
     }
 
+    get getAttack () {
+      const { chai, daiquiri, daisake } = this.bonus
+      const baseAttack = daisake > 0 ? this.getStats.attack * 2 : this.getStats.attack
+      return baseAttack * (chai + daiquiri + daisake + 1)
+    }
+
+    get getSpeed () {
+      const { daiquiri } = this.bonus
+      return this.getStats.speed * (daiquiri + 1)
+    }
+
+    get getCrit () {
+      const { daisake } = this.bonus
+      return daisake > 0 ? '100%' : this.getStats.crit
+    }
+
+    get totalSpent () {
+      const { chai, daiquiri, daisake } = this.bonus
+      return chai * 5 + daiquiri * 10 + daisake * 20
+    }
+
+    async beforeMount () {
+      this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
+    }
+
     async handleKittyClick () {
       if (this.isClickable) {
         if (this.isApproved) {
           this.showEnterModal = true
         } else {
-          await this.$ethereumService.approveContract(this.kitty.tokenId, this.ownAddress, this.networkId)
-          location.reload()
+          try {
+            await this.$ethereumService.approveContract(this.kitty.tokenId, this.ownAddress, this.networkId)
+            this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
+          } catch (e) {
+            console.log(e)
+            this.showError = true
+          }
         }
       }
     }
 
     closeEnterModal () {
+      this.showError = false
       this.showEnterModal = false
     }
 
     async fight () {
+      this.showError = false
       this.isSending = true
-      await this.$ethereumService.enterRaid(this.ownAddress, this.kitty.tokenId, this.networkId, () => location.reload())
+      try {
+        await this.$ethereumService.enterRaid(this.ownAddress, this.kitty.tokenId, this.networkId, this.bonus, () => location.reload())
+        this.closeEnterModal()
+      } catch (e) {
+        console.log(e)
+        this.showError = true
+      }
+      this.isSending = false
+    }
+
+    addBonus (bonusId) {
+      if (this.bonus[bonusId] === 5) { return }
+      this.bonus[bonusId]++
+    }
+
+    subBonus (bonusId) {
+      if (this.bonus[bonusId] === 0) { return }
+      this.bonus[bonusId]--
     }
   }
 </script>
@@ -208,6 +288,7 @@
     font-family: $font-mono;
     background-color: rgba($color-woodsmoke, 0.9);
     padding: 0.35rem 0.75rem;
+    margin: 0.25rem 0.35rem;
     border-radius: 0.25rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -265,6 +346,8 @@
       }
     }
     &__title {
+      @extend %row;
+      justify-content: space-between;
       margin: 1rem 0 0.5rem;
       color: $color-magikarp;
     }
@@ -272,12 +355,11 @@
       border-radius: 0.25rem;
       padding: 0.75rem 1rem;
       margin: 0.5rem 0;
-      margin-right: 0.75rem;
       background-color: $color-woodsmoke;
       font-family: $font-mono;
 
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto 1fr 0.5fr;
       grid-gap: 1rem;
       align-items: center;
 
@@ -285,6 +367,10 @@
         font-size: 1.1rem;
         font-weight: bold;
         margin-left: auto;
+
+        &--boost {
+          color: $color-gossip;
+        }
       }
 
       img {
@@ -295,6 +381,7 @@
       span {
         display: inline-block;
       }
+
     }
     &__boosts {
       display: grid;
@@ -304,7 +391,6 @@
       border-radius: 0.25rem;
       padding: 0.75rem 1rem;
       margin: 0.5rem 0;
-      margin-right: 0.75rem;
       background-color: $color-woodsmoke;
       font-family: $font-mono;
 
@@ -322,25 +408,33 @@
 
       &__add {
         margin-left: auto;
-        span {
-          &:last-of-type {
-            margin-left: 0.5rem;
-            font-weight: bold;
-            text-align: center;
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            line-height: 1;
-            background-color: $color-kournikova;
-            color: $color-obsidian;
-            border-radius: 50%;
-            padding: 0.15rem;
-            transition: 0.1s ease-in-out;
+        button {
+          outline: none;
+          border: none;
+          user-select: none;
+          margin-left: 0.5rem;
+          font-weight: bold;
+          text-align: center;
+          display: inline-block;
+          width: 1rem;
+          height: 1rem;
+          line-height: 0.8;
+          background-color: $color-kournikova;
+          color: $color-obsidian;
+          border-radius: 50%;
+          padding: 0.15rem;
+          transition: 0.1s ease-in-out;
 
-            &:hover {
-              cursor: pointer;
-              background-color: rgba($color-kournikova, 0.8);
-            }
+          &:hover {
+            cursor: pointer;
+            background-color: rgba($color-kournikova, 0.8);
+          }
+        }
+        &--disabled {
+          background-color: $color-iron !important;
+          &:hover {
+            cursor: default !important;
+            background-color: $color-iron !important;
           }
         }
       }
@@ -361,6 +455,40 @@
     width: 0.8rem;
     margin-right: 0.5rem;
     border-color: $color-swan !important;
+  }
+}
+
+.error {
+    color: $color-error;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
   }
 }
 </style>
