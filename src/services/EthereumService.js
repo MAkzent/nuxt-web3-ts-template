@@ -6,7 +6,7 @@ import KittyCoreAbi from '~/assets/data/ethereum/KittyCoreAbi.json'
 import { BLOCKNATIVE } from '~/assets/data/non_secret_keys.js'
 
 const DRAGONKITTY_MAIN = '0x64b1Bcc75436BBcbBB5AF0A1fF8337Cc73c4e25d'
-const DRAGONKITTY_RINKEBY = '0x30dc77f19f1244263d0C98191Aa6566d550f7aCF'
+const DRAGONKITTY_RINKEBY = '0x715345953F69b960557F7E61A2d99E0324261134'
 
 const CK_ADDRESS = '0x06012c8cf97bead5deae237070f9587f8e7a266d'
 const CK_ADDRESS_RINKEBY = '0x16baf0de678e52367adc69fd067e5edd1d33e3bf'

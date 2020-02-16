@@ -14,7 +14,7 @@ export default class EthersService {
 
   async eventListener () {
     console.log('listening...')
-    const contract = new ethers.Contract('0xE05525610B1aCA141c3179b560d0e325078244AB', DragonKittyABI, provider)
+    const contract = new ethers.Contract('0x715345953F69b960557F7E61A2d99E0324261134', DragonKittyABI, provider)
 
     contract.on('BossAppears', (oldValue, newValue, event) => {
       console.log('old and new', oldValue, newValue)
