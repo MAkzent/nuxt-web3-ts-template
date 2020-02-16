@@ -204,7 +204,7 @@ function setupKittyAPI() {
       var startIndex = parseInt(history.startIndex);
       var recordLength = parseInt(history.recordLength);
 
-      var resultArray : any[] = [];
+      var resultArray  = new Array();
       for (var i = 0; i < recordLength; i++)
       {
         var kitty = await contract.records(startIndex + i);
