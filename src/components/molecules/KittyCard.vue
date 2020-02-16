@@ -100,6 +100,10 @@
                 @click="addBonus('daisake')"
                 :class="{'enterBattleModal__body__boosts__add--disabled': bonus.daisake === 5 }"
               ) +
+      button.dai(
+        @click="approveDai"
+        v-if="!!totalSpent"
+      ) Approve DAI
       .error(v-if="showError") Tx Cancelled
 
     template(slot="footer")
@@ -218,6 +222,15 @@
           }
         }
       }
+    }
+
+    async approveDai () {
+      try {
+          await this.$ethereumService.approveDaiContract(this.ownAddress, this.networkId)
+        } catch (e) {
+          console.log(e)
+          this.showError = true
+        }
     }
 
     closeEnterModal () {
@@ -459,15 +472,20 @@
 }
 
 .error {
-    color: $color-error;
-    font-size: 1rem;
-    margin-top: 1.5rem;
-    text-align: center;
-    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
+  color: $color-error;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  text-align: center;
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.dai {
+  @extend %btn-primary;
+  margin: 0 auto;
+}
 
 @keyframes shake {
   10%,
