@@ -36,7 +36,7 @@
           .enterBattleModal__body__title Cattributes
           .enterBattleModal__body__stats
             img(:src="getElementImg")
-            span Elemental Attack Damage
+            span Elemental Damage
             .enterBattleModal__body__stats__value {{ getStats.attack }}
             img(src="~/assets/images/icons/speed.png")
             span Attack Speed

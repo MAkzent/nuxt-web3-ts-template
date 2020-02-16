@@ -3,14 +3,14 @@ const env = require('dotenv').config()
 export default {
   env: env.parsed,
   head: {
-    title: 'nuxt-web3-ts',
+    title: 'Die Kitties Dai',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: 'nuxt - web3 - typescript - OpenSea - ThreeBox'
+        content: 'Die Kitties Dai - Let your Kitties join the raid squad to win some Dai.'
       }
     ],
     link: [

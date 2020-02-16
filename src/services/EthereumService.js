@@ -214,4 +214,31 @@ export default class EthereumService {
         console.info(receipt)
       })
   }
+
+  // most standard ERC721 method implemented:
+  async eventListener () {
+    console.log('listening...');
+    var web3 = new Web3("https://shared-geth-rinkeby.nodes.deploy.radar.tech/?apikey=8f814d34c32fe7c41c2e908a8a2f210531fe0573685304a1");
+
+    var myContract = new web3.eth.Contract(abi, '0x51445382c3b61ccfe9f4b228e518eadcd47ecf3e');
+
+    myContract.getPastEvents(event => console.log('events: ', event))
+    myContract.getMessage(event => console.log('message: ', event))
+    console.log('WEB#: ', this.web3)
+    myContract.events.NewMessage({
+      fromBlock: 0
+    }, function(error, event){ console.log('event', event); })
+      .on("connected", function(subscriptionId){
+        console.log(subscriptionId);
+      })
+      .on('data', function(event){
+        console.log('data: ', event); // same results as the optional callback above
+      })
+      .on('changed', function(event){
+        console.log('changed: ', event); // same results as the optional callback above
+      })
+      .on('error', function(error, receipt) { // If the transaction was rejected by the network with a receipt, the second parameter will be the receipt.
+        console.log('error: ', event); // same results as the optional callback above
+      });
+  }
 }
