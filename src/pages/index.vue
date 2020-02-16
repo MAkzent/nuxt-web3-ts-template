@@ -2,8 +2,8 @@
 .landing
   .landing__wrapper
     section
-      .landing__headline Raid Boss 👹
       raid-boss-card
+      kitty-squad
     section
       .landing__headline Your Kitties 😼
       .landing__kitties--loading(v-if="!fetched")
@@ -17,30 +17,6 @@
           :isClickable="true"
         )
       .landing__kitties--empty(v-else) No Kitties 🙀
-
-      modal(
-        @modal-close="() => this.showModal = false"
-        v-if="showModal"
-    )
-        template(
-        slot="header"
-        v-if="modalTab === 1"
-        )
-            img.modal__image(src="~/assets/images/icons/kitty-dai.png")
-        template(
-            slot="header"
-            v-else
-            )
-            img.modal__image__large(src="~/assets/images/enemies/werewolf.png")
-
-        .modal__content(v-if="modalTab === 1") Earn DAI battling your CryptoKitties to the death
-        .modal__content(v-else) Your kitty just may be the one to beat the Raid Boss to claim victory 💰from the kitties that came before you
-        template(
-            slot="footerOneBtn"
-        )
-            button(
-                v-on:click="this.onClick"
-            ) {{modalTab === 1 ? "Next" : "Play"}}
 </template>
 
 <script lang="ts">
@@ -48,23 +24,21 @@
   import KittyCard from '~/components/molecules/KittyCard.vue'
   import RaidBossCard from '~/components/molecules/RaidBossCard.vue'
   import LoadingSpinner from '~/components/atoms/LoadingSpinner.vue'
-  import Modal from '~/components/molecules/Modal.vue'
-  import EthersService from '~/services/EthersService.js'
+  import KittySquad from '~/components/organisms/KittySquad.vue'
+  import EthersService from '../services/EthersService'
 
 @Component({
   components: {
     KittyCard,
-    LoadingSpinner,
     RaidBossCard,
-    Modal
+    LoadingSpinner,
+    KittySquad
   }
 })
   export default class extends Vue {
     @State ownAddress
     @State networkId
     private kitties = []
-    private showModal = true;
-    private modalTab = 1
     private fetched = false
     scrollToTop () {
       return true
@@ -77,10 +51,6 @@
     }
 
     async beforeMount () {
-     const { assets } = await this.$openSeaService.getKittiesByAccount(this.ownAddress, this.networkId) || {};
-     console.log(assets);
-     if (assets) { this.kitties = assets }
-     this.fetched = true
      await this.loadKitties()
       this.listenForEvents()
     }
@@ -98,15 +68,6 @@
       this.fetched = true
     }
 
-    onClick() {
-      if (this.modalTab === 2) {
-        this.showModal = false
-      } else {
-        this.modalTab = 2
-      }
-
-    }
-
 
   // getKittyAttributes(tokenId) {
   //   const element:
@@ -122,63 +83,46 @@
 
 <style lang="scss" scoped>
 .landing {
-  &__wrapper {
-    @include breakpoint(sm) {
-      display: grid;
-      grid-column-gap: 3rem;
-      grid-template-columns: 1fr 1.5fr;
+    &__wrapper {
+        @include breakpoint(sm) {
+            display: grid;
+            grid-column-gap: 3rem;
+            grid-template-columns: 1fr 1.5fr;
+        }
     }
-  }
-  &__headline {
-    margin: 1.5rem 0 1rem;
-    font-size: 1.2rem;
-    font-weight: 300;
-  }
-  &__unlock {
-    text-align: center;
-    margin: 3rem auto;
-    font-size: 1.2rem;
-    opacity: 0.6;
-  }
-  &__kitties {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 1rem;
-    @include breakpoint(sm) {
-      grid-template-columns: repeat(5, 1fr);
-      margin: 2rem 0;
+    &__headline {
+        margin: 1.5rem 0 1rem;
+        font-size: 1.2rem;
+        font-weight: 300;
     }
+    &__unlock {
+        text-align: center;
+        margin: 3rem auto;
+        font-size: 1.2rem;
+        opacity: 0.6;
+    }
+    &__kitties {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 1rem;
+        @include breakpoint(sm) {
+            grid-template-columns: repeat(5, 1fr);
+            margin: 2rem 0;
+        }
 
-    &--loading {
-      height: 1rem;
-      width: 1rem;
-      margin: 3rem auto;
-    }
+        &--loading {
+            height: 1rem;
+            width: 1rem;
+            margin: 3rem auto;
+        }
 
-    &--empty {
-      text-align: center;
-      margin: 3rem auto;
-      font-weight: 1.2rem;
-      opacity: 0.6;
+        &--empty {
+            text-align: center;
+            margin: 3rem auto;
+            font-weight: 1.2rem;
+            opacity: 0.6;
+        }
     }
-  }
 }
-    .modal {
-        &__image {
-            width: auto;
-            height: auto;
-            max-width: 5rem;
-            max-height: 5rem;
-            &__large {
-                width: auto;
-                height: auto;
-                max-width: 10rem;
-                max-height: 10rem;
-            }
-        }
-        &__content {
-
-        }
-    }
 
 </style>

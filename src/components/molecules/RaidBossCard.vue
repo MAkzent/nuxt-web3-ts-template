@@ -2,6 +2,7 @@
 section
   .raidBoss(:style="{ backgroundImage: `url(${require('~/assets/images/enemies/golem.png')})`}")
     button.raidBoss__history(@click="showHistoryModal = true") Raid History
+    .raidBoss__headline Raid Boss
   .raidBoss__stats
     .raidBoss__stats__category HP
     .raidBoss__stats__value
@@ -22,11 +23,11 @@ section
       .raidHistory__body__headline Raid Boss Stats
       .raidHistory__body__header__stats
         .raidHistory__body__header__stats__category Element
-        .raidHistory__body__header__stats__value ???
+        .raidHistory__body__header__stats__value secret
         .raidHistory__body__header__stats__category Type
-        .raidHistory__body__header__stats__value ???
+        .raidHistory__body__header__stats__value secret
         .raidHistory__body__header__stats__category Skin Thickness
-        .raidHistory__body__header__stats__value ??
+        .raidHistory__body__header__stats__value secret
       .raidHistory__body__headline R.I.P. Kitties
       .raidHistory__body__kitties
         .kitty(
@@ -113,6 +114,8 @@ section
 
 <style lang="scss" scoped>
 .raidBoss{
+  margin-top: 1rem;
+  z-index: 0;
   position: relative;
   border-radius: 0.125rem;
   height: 20rem;
@@ -120,6 +123,16 @@ section
   background-position: 50% 10%;
   background-size: cover;
   background-repeat: none;
+
+  &__headline {
+    background-color: rgba($color-woodsmoke, 0.5);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    filter: drop-shadow(1px 1px 4px rgba($color-obsidian, 0.7));
+  }
 
   &__history {
     @extend %btn-primary;
@@ -191,9 +204,9 @@ section
         }
         &__value {
           text-align: right;
-          font-size: 1.2rem;
-          font-weight: bold;
+          font-size: 1rem;
           margin-left: auto;
+          color: $color-magikarp;
         }
       }
     }
