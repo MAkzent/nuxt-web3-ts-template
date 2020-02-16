@@ -75,7 +75,10 @@
       })
 
       const boss = await contract.currentBoss();
-      console.log('boss: ', boss)
+      const bossId = boss.bossId.toString()
+      console.log('boss: ', boss.bossId.toString())
+      // const history = await contract.history(0)
+      // console.log('history: ', history)
 
     }
 
