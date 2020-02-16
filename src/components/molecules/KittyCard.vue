@@ -114,8 +114,10 @@
 
     private showEnterModal = false
 
-    beforeMount () {
+    async beforeMount () {
       console.log(this.kitty);
+      this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
+
     }
 
     getKittyQuote () {
@@ -144,10 +146,6 @@
         case 4: return require('~/assets/images/icons/water.png')
         default: return require('~/assets/images/icons/fire.png')
       }
-    }
-
-    async beforeMount () {
-      this.isApproved = await this.$ethereumService.getIsKittyApproved(this.kitty.tokenId, this.networkId)
     }
 
     async handleKittyClick () {
