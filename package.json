@@ -22,7 +22,7 @@
     "mchplus.js": "^0.0.20",
     "node-sass": "^4.13.0",
     "normalize.css": "^8.0.1",
-    "nuxt": "2.11.0",
+    "nuxt": "3.4.3",
     "nuxt-i18n": "^6.5.0",
     "nuxt-property-decorator": "2.5.0",
     "pug": "^2.0.4",
